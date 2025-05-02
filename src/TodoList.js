@@ -4,52 +4,52 @@ import './TodoList.css'
 
 
 function TodoApp () {
-    const [todo,setTodo] = useState(() => {
-        const savedTodo = localStorage.getItem("todo")
+    const [todoList,setTodoList] = useState(() => {
+        const savedtodoList = localStorage.getItem("todoList")
 
-        if (savedTodo) {
-            return JSON.parse(savedTodo)
+        if (savedtodoList) {
+            return JSON.parse(savedtodoList)
         } else {
             return [] ;
         }
     });
-    const [todos,setTodos] = useState("");
+    const [inputTodoValue,setInputTodoValue] = useState("");
     const todosRef = useRef(null)
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
     useEffect (() => {
-        localStorage.setItem('todo', JSON.stringify(todo));
-    }, [todo])
+        localStorage.setItem('todoList', JSON.stringify(todoList));
+    }, [todoList])
     
-    const saveTodo = useCallback ((e) => {
+    const savetodoList = useCallback ((e) => {
         e.preventDefault();
 
-        if (todos !== "") {
-            setTodo([
-                ...todo,
+        if (inputTodoValue !== "") {
+            setTodoList([
+                ...todoList,
                 {
-                    id: todo.length + 1,
-                    text: todos.trim()
+                    id: todoList.length + 1,
+                    text: inputTodoValue.trim()
                 }
             ])
         }
-        setTodos("");
+        setInputTodoValue("");
         todosRef.current.focus();
         
-    }, [todos,todo]);
+    }, [inputTodoValue,todoList]);
 
     const deleteTodo = useCallback ((id) => {
-        setTodo(todo.filter((todos) => todos.id !== id));
+        setTodoList(todoList.filter((inputTodoValue) => inputTodoValue.id !== id));
         
-    }, [todo]);
+    }, [todoList]);
 
     const clearAll = useCallback (() => {
-        setTodo([]);
+        setTodoList([]);
     }, [] )
 
-    console.log(todo);
+    console.log(todoList);
 
-    const pendingCount = useMemo(() => todo.length, [todo])
+    const pendingCount = useMemo(() => todoList.length, [todoList])
     
 
 
@@ -57,14 +57,14 @@ function TodoApp () {
     return (
         <div className="container">
             <h1>Todo-App</h1>
-            <form className="todoForm" onSubmit={saveTodo}>
+            <form className="todoForm" onSubmit={savetodoList}>
             <input 
                     type="text" 
-                    name="todo-input" 
+                    name="todoList-input" 
                     placeholder="What you wanna do?" 
                     ref={todosRef}
-                    value={todos}
-                    onChange={(e) => setTodos(e.target.value)}>
+                    value={inputTodoValue}
+                    onChange={(e) => setInputTodoValue(e.target.value)}>
                 </input>
                 <button 
                     type="subnit" 
@@ -73,10 +73,10 @@ function TodoApp () {
                 </button>
             </form>
             <ul className="todo-list">
-                {todo.map((todos) => (
-                    <li key={todos.id}>{todos.text}
+                {todoList.map((inputTodoValue) => (
+                    <li key={inputTodoValue.id}>{inputTodoValue.text}
                     {" "}
-                    <button onClick={() => deleteTodo(todos.id)} title="ลบรายการนี้"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALpJREFUSEtjZKAxYKSx+Qx4LXgeEODwn5FxPgMDgwIOhzxg/P8/UXLDhgO4HIrXgmeBgfsZGBgcCPjygdT69YrkWvAfpFFq/XqsDnkWGIhXHqSXkA+oawHMRZRGPLKPUXxAcwtgLicmbJF9iU892ZFHVQvQXUiIj2w5UT4gZCDFQTRqAUa+IjVIRuOAYNFEcRARsoEcC4ipaNDtPSC1fr0juiDWnAytKuuJqM1g5uGsOge20icU9sTIAwAKUNQZPmcGWgAAAABJRU5ErkJggg=="/></button>
+                    <button onClick={() => deleteTodo(inputTodoValue.id)} title="ลบรายการนี้"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALpJREFUSEtjZKAxYKSx+Qx4LXgeEODwn5FxPgMDgwIOhzxg/P8/UXLDhgO4HIrXgmeBgfsZGBgcCPjygdT69YrkWvAfpFFq/XqsDnkWGIhXHqSXkA+oawHMRZRGPLKPUXxAcwtgLicmbJF9iU892ZFHVQvQXUiIj2w5UT4gZCDFQTRqAUa+IjVIRuOAYNFEcRARsoEcC4ipaNDtPSC1fr0juiDWnAytKuuJqM1g5uGsOge20icU9sTIAwAKUNQZPmcGWgAAAABJRU5ErkJggg=="/></button>
                     </li>
                 ))}
             </ul>
